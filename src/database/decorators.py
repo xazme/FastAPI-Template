@@ -23,12 +23,9 @@ def db_exception_handler(
             return result
         except OperationalError as e:
             print(f"Ошибка подключения к базе данных: {e}")
-            return None
         except DatabaseError as e:
             print(f"Общая ошибка базы данных: {e}")
-            return None
         except SQLAlchemyError as e:
             print(f"Ошибка SQLAlchemy: {e}")
-            return None
 
     return wrapper
