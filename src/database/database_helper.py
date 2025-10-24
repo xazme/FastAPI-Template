@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import (
 )
 from .base import Base
 from .decorators import db_exception_handler
+from ..core import settings
 
 
 class DataBaseHelper:
@@ -50,3 +51,9 @@ class DataBaseHelper:
     @db_exception_handler
     async def dispose(self) -> None:
         await self.__engine.dispose()
+
+
+db_helper = DataBaseHelper(
+    db_url=settings.db_url,
+    echo=settings.ECHO,
+)
