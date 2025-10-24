@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 from .base import Base
+from .decorators import db_exception_handler
 
 
 class DataBaseHelper:
@@ -31,14 +32,21 @@ class DataBaseHelper:
             expire_on_commit=self.expire_on_commit,
         )
 
+    @db_exception_handler
     async def get_session(self) -> AsyncGenerator[AsyncSession, None]:
         async with self.__session_factory() as session:
             yield session
 
+    @db_exception_handler
     async def create_tables(self) -> None:
         async with self.__engine.begin() as connection:
             await connection.run_sync(Base.metadata.create_all)
 
+    @db_exception_handler
     async def drop_tables(self) -> None:
         async with self.__engine.begin() as connection:
             await connection.run_sync(Base.metadata.drop_all)
+
+    @db_exception_handler
+    async def dispose(self) -> None:
+        await self.__engine.dispose()
