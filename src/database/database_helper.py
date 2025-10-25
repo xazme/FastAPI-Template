@@ -50,3 +50,6 @@ class DataBaseHelper:
     @db_exception_handler
     async def dispose(self) -> None:
         await self.__engine.dispose()
+
+
+db_helper = DataBaseHelper()

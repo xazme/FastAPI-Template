@@ -14,7 +14,6 @@ class DevelopmentConfig(BaseSettings):
     cors_allow_credentials: bool = True
     cors_allow_methods: list[str] = ["*"]
     cors_allow_headers: list[str] = ["*"]
-    use_sentry: bool = False
     model_config = SettingsConfigDict(
         env_file=ENV_FILE_PATH,
         env_file_encoding="utf-8",
