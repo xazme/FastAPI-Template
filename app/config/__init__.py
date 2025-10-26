@@ -22,4 +22,4 @@ def get_settings() -> Union[ProductionSettings, DevelopmentSettings]:
 
 settings: Union[ProductionSettings, DevelopmentSettings] = get_settings()
 
-__all__ = ["get_settings"]
+__all__ = ["settings"]
