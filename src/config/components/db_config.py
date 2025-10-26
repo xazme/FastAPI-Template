@@ -1,5 +1,6 @@
 from pydantic import Field, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from ..constans import ENV_FILE_PATH
 
 
 class DataBaseConfig(BaseSettings):
@@ -10,7 +11,7 @@ class DataBaseConfig(BaseSettings):
     postgres_db: str = Field(default="postgres")
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=ENV_FILE_PATH,
         env_file_encoding="utf-8",
     )
 
