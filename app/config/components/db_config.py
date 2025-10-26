@@ -16,5 +16,5 @@ class DataBaseConfig(BaseSettings):
     )
 
     @computed_field(return_type=str)
-    def postgres_connection_string(self):
+    def postgres_connection(self):
         return f"postgres://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
