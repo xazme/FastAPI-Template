@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     create_async_engine,
 )
+from app.config import settings
 from .base import Base
 from .decorators import db_exception_handler
 
@@ -32,7 +33,7 @@ class DataBaseHelper:
             expire_on_commit=self.expire_on_commit,
         )
 
-    @db_exception_handler
+    # @db_exception_handler FIXME ГЕНЕРАТОР
     async def get_session(self) -> AsyncGenerator[AsyncSession, None]:
         async with self.__session_factory() as session:
             yield session
@@ -52,4 +53,4 @@ class DataBaseHelper:
         await self.__engine.dispose()
 
 
-db_helper = DataBaseHelper()
+db_helper = DataBaseHelper(db_url=settings.postgres_connection())
