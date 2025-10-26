@@ -4,3 +4,6 @@ from .redis_config import RedisConfig
 
 
 class ComponentsConfig(BaseConfig, DataBaseConfig, RedisConfig): ...
+
+
+__all__ = ["ComponentsConfig"]

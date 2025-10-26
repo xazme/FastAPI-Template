@@ -1,1 +1,3 @@
-from .base import Base  # pyright: ignore[reportUnusedImport]
+from .base import Base
+
+__all__ = ["Base"]
