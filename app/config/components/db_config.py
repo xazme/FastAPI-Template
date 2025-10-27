@@ -1,4 +1,4 @@
-from pydantic import Field, computed_field
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from ..constans import ENV_FILE_PATH
 
@@ -15,6 +15,6 @@ class DataBaseConfig(BaseSettings):
         env_file_encoding="utf-8",
     )
 
-    @computed_field(return_type=str)
+    @property
     def postgres_connection(self):
-        return f"postgres://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
+        return f"postgresql+asyncpg://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"

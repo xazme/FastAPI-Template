@@ -2,12 +2,12 @@ from typing import AsyncGenerator
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.config import settings
-from app.database import db_helper
+from config import settings
+from database import db_helper
 
 
 def _init_router(_app: FastAPI) -> None:
-    from app.api import router
+    from api import router
 
     _app.include_router(router=router)
 
