@@ -1,9 +1,16 @@
 from typing import AsyncGenerator
 from contextlib import asynccontextmanager
+from pydantic import ValidationError
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from config import settings
 from database import db_helper
+from error_handlers import (
+    not_found_handler,
+    already_exists_handler,
+    validation_error_handler,
+)
+from shared import ObjectNotFoundError, ObjectAlreadyExistsError
 
 
 def _init_router(_app: FastAPI) -> None:
@@ -22,11 +29,18 @@ def _init_middleware(_app: FastAPI) -> None:
     )
 
 
+def _init_exception_handler(_app: FastAPI) -> None:
+    _app.add_exception_handler(ObjectNotFoundError, not_found_handler)
+    _app.add_exception_handler(ObjectAlreadyExistsError, already_exists_handler)
+    _app.add_exception_handler(ValidationError, validation_error_handler)
+
+
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncGenerator[None, None]:
     try:
         await db_helper.create_tables()
         yield
+        # await db_helper.drop_tables()
         await db_helper.dispose()
     except Exception:
         raise
@@ -43,6 +57,7 @@ def create_app() -> FastAPI:
     )
     _init_middleware(_app)
     _init_router(_app)
+    _init_exception_handler(_app)
     return _app
 
 
