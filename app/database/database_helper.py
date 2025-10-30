@@ -53,4 +53,7 @@ class DataBaseHelper:
         await self.__engine.dispose()
 
 
-db_helper = DataBaseHelper(db_url=settings.postgres_connection)
+db_helper = DataBaseHelper(
+    db_url=settings.postgres_connection,
+    echo=True,
+)
