@@ -12,5 +12,6 @@ def main():
     )
 
 
+# find . | grep -E "(/__pycache__$|\.pyc$|\.pyo$)" | xargs rm -rf
 if __name__ == "__main__":
     main()
