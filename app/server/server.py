@@ -3,18 +3,18 @@ from contextlib import asynccontextmanager
 from pydantic import ValidationError
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from config import settings
-from database import db_helper
-from error_handlers import (
+from app.config import settings
+from app.database import db_helper
+from app.error_handlers import (
     not_found_handler,
     already_exists_handler,
     validation_error_handler,
 )
-from shared import ObjectNotFoundError, ObjectAlreadyExistsError
+from app.shared import ObjectNotFoundError, ObjectAlreadyExistsError
 
 
 def _init_router(_app: FastAPI) -> None:
-    from api import router
+    from app.api import router
 
     _app.include_router(router=router)
 
@@ -38,7 +38,7 @@ def _init_exception_handler(_app: FastAPI) -> None:
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncGenerator[None, None]:
     try:
-        await db_helper.create_tables()
+        # await db_helper.create_tables()
         yield
         # await db_helper.drop_tables()
         await db_helper.dispose()

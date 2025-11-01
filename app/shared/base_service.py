@@ -1,8 +1,7 @@
 from typing import TypeVar, Generic, Any, Optional, Sequence, Mapping
 from sqlalchemy.sql import ColumnElement
 from sqlalchemy.ext.asyncio import AsyncSession
-from database import Base
-
+from app.database import Base
 from .base_repository import BaseRepository
 
 T = TypeVar(name="T", bound=Base)

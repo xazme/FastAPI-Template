@@ -1,6 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from shared.base_repository import BaseRepository
-from shared import BaseService
+from app.shared import BaseService, BaseRepository
 from .user_model import User
 
 

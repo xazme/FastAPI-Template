@@ -3,7 +3,7 @@ from sqlalchemy import delete, insert, select, func, update
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.sql.elements import ColumnElement
 from sqlalchemy.ext.asyncio import AsyncSession
-from database import Base
+from app.database import Base
 from .exceptions import ObjectNotFoundError, ObjectAlreadyExistsError
 
 T = TypeVar("T", bound=Base)
