@@ -1,20 +1,16 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
-from ..constans import ENV_FILE_PATH
+from pydantic import Field
+from .base_config import BaseConfig
 
 
-class DevelopmentConfig(BaseSettings):
-    env: str = "development"
-    reload: bool = True
-    workers: int = 1
-    docs_url: str = "/docs"
-    redoc_url: str = "/redoc"
+class DevelopmentConfig(BaseConfig):
+    env: str = Field(default="development")
+    reload: bool = Field(default=True)
+    workers: int = Field(default=1)
+    docs_url: str = Field(default="/docs")
+    redoc_url: str = Field(default="/redoc")
 
-    # CORS settings
-    cors_origins: list[str] = ["*"]
-    cors_allow_credentials: bool = True
-    cors_allow_methods: list[str] = ["*"]
-    cors_allow_headers: list[str] = ["*"]
-    model_config = SettingsConfigDict(
-        env_file=ENV_FILE_PATH,
-        env_file_encoding="utf-8",
-    )
+    # CORS
+    cors_origins: list[str] = Field(default=["*"])
+    cors_allow_credentials: bool = Field(default=True)
+    cors_allow_methods: list[str] = Field(default=["*"])
+    cors_allow_headers: list[str] = Field(default=["*"])

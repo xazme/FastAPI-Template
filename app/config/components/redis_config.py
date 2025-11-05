@@ -1,4 +1,4 @@
-from pydantic import Field, computed_field
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from ..constans import ENV_FILE_PATH
 
@@ -14,7 +14,7 @@ class RedisConfig(BaseSettings):
         env_file_encoding="utf-8",
     )
 
-    @computed_field(return_type=str)
+    @property
     def redis_connection_string(self):
         return (
             self.redis_url
