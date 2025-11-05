@@ -5,14 +5,14 @@ from .user_dto import CreateUserDTO, UpdateUserDTO, ResponseUserDTO
 from .user_service import UserService
 from .user_dependencies import get_user_service
 
-router = APIRouter(prefix="/user", tags=["User"])
+router = APIRouter()
 
 
 @router.get(
     path="/all",
     response_model=list[ResponseUserDTO],
 )
-async def get_users(
+async def get_all(
     user_service: Annotated[UserService, Depends(get_user_service)],
 ):
     return await user_service.get_all()
@@ -23,7 +23,7 @@ async def get_users(
     response_model=ResponseUserDTO,
     status_code=201,
 )
-async def create_user(
+async def create(
     payload: Annotated[CreateUserDTO, Body(...)],
     user_service: Annotated[UserService, Depends(get_user_service)],
 ):
@@ -36,7 +36,7 @@ async def create_user(
     path="/{user_id}",
     response_model=ResponseUserDTO,
 )
-async def get_user(
+async def get_one(
     user_id: Annotated[UUID, Path(...)],
     user_service: Annotated[UserService, Depends(get_user_service)],
 ):
@@ -50,7 +50,7 @@ async def get_user(
     response_model=ResponseUserDTO,
     response_model_exclude_unset=True,
 )
-async def update_user(
+async def update(
     user_id: Annotated[UUID, Path(...)],
     payload: Annotated[UpdateUserDTO, Body(...)],
     user_service: Annotated[UserService, Depends(get_user_service)],
@@ -64,7 +64,7 @@ async def update_user(
     path="/{user_id}",
     response_model=int,
 )
-async def delete_user(
+async def delete(
     user_id: Annotated[UUID, Path(...)],
     user_service: Annotated[UserService, Depends(get_user_service)],
 ):
