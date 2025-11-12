@@ -1,4 +1,4 @@
-from typing import TypeVar, Generic, Any, Optional, Sequence, Mapping
+from typing import TypeVar, Generic, Any, Optional, Sequence
 from sqlalchemy.sql import ColumnElement
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import Base
@@ -8,6 +8,8 @@ T = TypeVar(name="T", bound=Base)
 
 
 class BaseService(Generic[T]):
+    """Base Service"""
+
     def __init__(
         self,
         repository: BaseRepository[T],
@@ -23,7 +25,7 @@ class BaseService(Generic[T]):
         self,
         *where: ColumnElement[bool],
         **where_by: Any,
-    ) -> Optional[T]:
+    ) -> T:
         return await self.repository.get_one(*where, **where_by)
 
     async def get_one_or_none(
@@ -33,7 +35,9 @@ class BaseService(Generic[T]):
     ) -> Optional[T]:
         return await self.repository.get_one_or_none(*where, **where_by)
 
-    async def get_all(self) -> Sequence[T]:
+    async def get_all(
+        self,
+    ) -> Sequence[T]:
         return await self.repository.get_all()
 
     async def get_all_filtered(
@@ -59,28 +63,28 @@ class BaseService(Generic[T]):
 
     async def create(
         self,
-        payload: Mapping[str, Any],
-    ) -> Optional[T]:
-        obj = await self.repository.create(payload)
+        payload: dict[str, Any],
+    ) -> T:
+        obj = await self.repository.create(payload=payload)
         await self._safe_commit()
         return obj
 
     async def update(
         self,
-        payload: Mapping[str, Any],
+        payload: dict[str, Any],
         *where: ColumnElement[bool],
         **where_by: Any,
-    ) -> Optional[T]:
-        obj = await self.repository.update(payload, *where, **where_by)
+    ) -> T:
+        obj = await self.repository.update(payload=payload, *where, **where_by)
         await self._safe_commit()
         return obj
 
     async def update_by_id(
         self,
-        _id: Any,
-        payload: Mapping[str, Any],
-    ) -> Optional[T]:
-        obj = await self.repository.update(payload=payload, id=_id)
+        id: Any,
+        payload: dict[str, Any],
+    ) -> T:
+        obj = await self.repository.update(payload=payload, id=id)
         await self._safe_commit()
         return obj
 
@@ -88,15 +92,16 @@ class BaseService(Generic[T]):
         self,
         *where: ColumnElement[bool],
         **where_by: Any,
-    ) -> int:
-        obj = await self.repository.delete(*where, **where_by)
+    ) -> None:
+        await self.repository.delete(*where, **where_by)
         await self._safe_commit()
-        return obj
 
-    async def delete_by_id(self, _id: Any) -> int:
-        obj = await self.repository.delete(id=_id)
+    async def delete_by_id(
+        self,
+        id: Any,
+    ) -> None:
+        await self.repository.delete(id=id)
         await self._safe_commit()
-        return obj
 
     async def _safe_commit(self):
         try:
