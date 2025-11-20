@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import (
 )
 from app.config import settings
 from .base import Base
-from .decorators import db_exception_handler
+from .db_decorators import db_exception_handler
 
 
 class DataBaseHelper:
