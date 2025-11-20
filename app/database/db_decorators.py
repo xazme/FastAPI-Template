@@ -17,7 +17,7 @@ from sqlalchemy.exc import (
 )
 
 if TYPE_CHECKING:
-    from .database_helper import DataBaseHelper
+    from .db_helper import DataBaseHelper
 
 P = ParamSpec("P")
 R = TypeVar("R")
