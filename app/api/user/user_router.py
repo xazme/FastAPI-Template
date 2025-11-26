@@ -1,9 +1,8 @@
 from uuid import UUID
-from fastapi import APIRouter, Depends, Path, Body, status
+from fastapi import APIRouter, Path, Body, status
 from typing import Annotated
-from .user_dto import CreateUserDTO, UpdateUserDTO, ResponseUserDTO
-from .user_service import UserService
-from .user_dependencies import get_user_service
+from .user_dto import UpdateUserDTO, ResponseUserDTO
+from .user_dependencies import UserServiceDep
 
 router = APIRouter()
 
@@ -14,25 +13,9 @@ router = APIRouter()
     status_code=status.HTTP_200_OK,
 )
 async def get_all(
-    user_service: Annotated[UserService, Depends(get_user_service)],
+    user_service: UserServiceDep,
 ):
     return await user_service.get_all()
-
-
-@router.post(
-    path="/create",
-    response_model=ResponseUserDTO,
-    status_code=status.HTTP_201_CREATED,
-)
-async def create(
-    payload: Annotated[CreateUserDTO, Body(...)],
-    user_service: Annotated[UserService, Depends(get_user_service)],
-):
-    return ResponseUserDTO.model_validate(
-        await user_service.create(
-            payload=payload.model_dump(),
-        ),
-    )
 
 
 @router.get(
@@ -42,7 +25,7 @@ async def create(
 )
 async def get_one(
     user_id: Annotated[UUID, Path(...)],
-    user_service: Annotated[UserService, Depends(get_user_service)],
+    user_service: UserServiceDep,
 ):
     return ResponseUserDTO.model_validate(
         await user_service.get_one(id=user_id),
@@ -58,7 +41,7 @@ async def get_one(
 async def update(
     user_id: Annotated[UUID, Path(...)],
     payload: Annotated[UpdateUserDTO, Body(...)],
-    user_service: Annotated[UserService, Depends(get_user_service)],
+    user_service: UserServiceDep,
 ):
     return ResponseUserDTO.model_validate(
         await user_service.update_by_id(
@@ -75,6 +58,6 @@ async def update(
 )
 async def delete(
     user_id: Annotated[UUID, Path(...)],
-    user_service: Annotated[UserService, Depends(get_user_service)],
+    user_service: UserServiceDep,
 ):
     await user_service.delete_by_id(id=user_id)

@@ -1,20 +1,30 @@
-from pydantic import Field
+from functools import cached_property
+from pydantic import Field, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from ..constans import ENV_FILE_PATH
 
 
 class RedisConfig(BaseSettings):
-    redis_host: str = Field(default="localhost")
-    redis_port: int = Field(default=6379)
-    redis_db: int = Field(default=0)
-    redis_url: str = Field(default="")
+    redis_host: str = Field(
+        default="localhost",
+    )
+    redis_port: int = Field(
+        default=6379,
+    )
+    redis_db: int = Field(
+        default=0,
+    )
+    redis_url: str = Field(
+        default="",
+    )
 
     model_config = SettingsConfigDict(
         env_file=ENV_FILE_PATH,
         env_file_encoding="utf-8",
     )
 
-    @property
+    @computed_field(return_type="str")
+    @cached_property
     def redis_connection_string(self):
         return (
             self.redis_url

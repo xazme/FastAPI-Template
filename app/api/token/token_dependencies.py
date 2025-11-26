@@ -2,18 +2,18 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import db_helper
-from .user_service import UserService
-from .user_repository import UserRepository
+from .token_repository import TokenRepository
+from .token_service import TokenService
 
 
-def get_user_service(
+def get_token_service(
     session: Annotated[AsyncSession, Depends(db_helper.get_session)],
-) -> UserService:
-    repository = UserRepository(session=session)
-    return UserService(
+):
+    repository = TokenRepository(session=session)
+    return TokenService(
         repository=repository,
         session=session,
     )
 
 
-UserServiceDep = Annotated[UserService, Depends(get_user_service)]
+TokenServiceDep = Annotated[TokenService, Depends(get_token_service)]
