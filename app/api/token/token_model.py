@@ -11,11 +11,7 @@ if TYPE_CHECKING:
 
 class Token(Base, CreatedAtMixin, UpdatedAtMixin):
     user_id: Mapped[UUID] = mapped_column(
-<<<<<<< HEAD
         ForeignKey(column="user.id"),
-=======
-        ForeignKey(column="users.id"),
->>>>>>> dev
         unique=True,
     )
 
