@@ -58,8 +58,6 @@ class DataBaseHelper:
 
     # @db_exception_handler FIXME ГЕНЕРАТОР
     async def get_session(self) -> AsyncGenerator[AsyncSession, None]:
-<<<<<<< HEAD
-=======
         """
         Provide an asynchronous database session generator.
 
@@ -75,14 +73,11 @@ class DataBaseHelper:
             The @db_exception_handler decorator is currently commented out (FIXME)
             because it may not be compatible with generators.
         """
->>>>>>> dev
         async with self.__session_factory() as session:
             yield session
 
     @db_exception_handler
     async def create_tables(self) -> None:
-<<<<<<< HEAD
-=======
         """
         Create all database tables defined in the Base metadata.
 
@@ -95,14 +90,11 @@ class DataBaseHelper:
             Exception: If table creation fails and @db_exception_handler is active,
                        the exception will be handled accordingly.
         """
->>>>>>> dev
         async with self.__engine.begin() as connection:
             await connection.run_sync(Base.metadata.create_all)
 
     @db_exception_handler
     async def drop_tables(self) -> None:
-<<<<<<< HEAD
-=======
         """
         Drop all database tables defined in the Base metadata.
 
@@ -115,14 +107,11 @@ class DataBaseHelper:
             Exception: If table dropping fails and @db_exception_handler is active,
                        the exception will be handled accordingly.
         """
->>>>>>> dev
         async with self.__engine.begin() as connection:
             await connection.run_sync(Base.metadata.drop_all)
 
     @db_exception_handler
     async def dispose(self) -> None:
-<<<<<<< HEAD
-=======
         """
         Dispose of the async engine and close all associated connections.
 
@@ -133,7 +122,6 @@ class DataBaseHelper:
             Exception: If engine disposal fails and @db_exception_handler is active,
                        the exception will be handled accordingly.
         """
->>>>>>> dev
         await self.__engine.dispose()
 
 
