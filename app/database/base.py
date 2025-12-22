@@ -1,6 +1,7 @@
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, declared_attr
+from .db_util import generate_correct_spelling_table_name
 
 
 class Base(DeclarativeBase):
@@ -16,4 +17,6 @@ class Base(DeclarativeBase):
 
     @declared_attr.directive
     def __tablename__(cls):
-        return cls.__name__.lower()
+        return generate_correct_spelling_table_name(
+            name=cls.__name__.lower(),
+        )
