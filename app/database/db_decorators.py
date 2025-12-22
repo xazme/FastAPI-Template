@@ -33,10 +33,13 @@ def db_exception_handler(
         try:
             return await func(self, *args, **kwargs)
         except OperationalError as e:
-            print(f"Ошибка подключения к базе данных: {e}")
+            print(f"Operational Error: {e}")
+            raise
         except DatabaseError as e:
-            print(f"Общая ошибка базы данных: {e}")
+            print(f"DataBase Error: {e}")
+            raise
         except SQLAlchemyError as e:
-            print(f"Ошибка SQLAlchemy: {e}")
+            print(f"SQLAlchemy Error: {e}")
+            raise
 
     return wrapper
