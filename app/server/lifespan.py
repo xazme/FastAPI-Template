@@ -6,6 +6,29 @@ from app.database import db_helper
 
 @asynccontextmanager
 async def app_lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    """
+    Manage the lifespan of the FastAPI application with asynchronous startup and shutdown events.
+
+    This async context manager is used to handle setup and teardown logic for the FastAPI
+    application lifecycle. Currently, it supports shutdown operations such as safely
+    disposing of the database connection pool. Startup logic can be added as needed.
+
+    The function yields control back to the application during its runtime. On shutdown,
+    it ensures that the database helper disposes of any active connections or resources.
+
+    Args:
+        app (FastAPI): The FastAPI application instance to which this lifespan is attached.
+
+    Yields:
+        AsyncGenerator[None, None]: A generator that yields control during app runtime.
+
+    Example:
+        app = FastAPI(lifespan=app_lifespan)
+
+    Note:
+        Lines for creating and dropping tables are commented out and can be enabled
+        for development or testing if needed.
+    """
     try:
         # await db_helper.create_tables()
         yield

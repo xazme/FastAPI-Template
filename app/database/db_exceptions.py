@@ -3,17 +3,13 @@ class DataBaseException(Exception):
         super().__init__(details)
 
 
-class ObjectNotFoundError(DataBaseException):
-    """Объект не найден"""
+class ObjectNotFoundError(DataBaseException): ...
 
 
-class ObjectAlreadyExistsError(DataBaseException):
-    """Нарушение уникальности"""
+class ObjectAlreadyExistsError(DataBaseException): ...
 
 
-class EmptyUpdateError(DataBaseException):
-    """Попытка вызвать update без payload"""
+class EmptyUpdateError(DataBaseException): ...
 
 
-class UnsafeDeleteError(DataBaseException):
-    """Попытка удалить без фильтров"""
+class UnsafeDeleteError(DataBaseException): ...
