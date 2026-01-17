@@ -1,9 +1,8 @@
 from .db_config import DataBaseConfig
-from .redis_config import RedisConfig
 from .jwt_config import JWTConfig
 
 
-class ComponentsConfig(DataBaseConfig, RedisConfig, JWTConfig): ...
+class ComponentsConfig(DataBaseConfig, JWTConfig): ...
 
 
 __all__ = ["ComponentsConfig"]

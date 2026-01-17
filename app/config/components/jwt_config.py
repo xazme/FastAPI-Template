@@ -1,7 +1,10 @@
+import os
 from functools import cached_property
 from pydantic import Field, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from ..constans import ENV_FILE_PATH
+from ..constans import ENV_FILE_MAP
+
+ENV = os.getenv("ENV", "dev")
 
 
 class JWTConfig(BaseSettings):
@@ -64,6 +67,6 @@ class JWTConfig(BaseSettings):
         return key
 
     model_config = SettingsConfigDict(
-        env_file=ENV_FILE_PATH,
+        env_file=ENV_FILE_MAP.get(ENV),
         env_file_encoding="utf-8",
     )
