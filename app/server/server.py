@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from app.config import settings
 from app.api import init_routers
-from app.middlewares import init_middlewares
-from app.exception_handlers import init_exception_handlers
+from app.core.middlewares import init_middlewares
+from app.core.exception_handlers import init_exception_handlers
 from .lifespan import app_lifespan
 
 
