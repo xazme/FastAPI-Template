@@ -1,6 +1,4 @@
-class DataBaseException(Exception):
-    def __init__(self, details: str) -> None:
-        super().__init__(details)
+class DataBaseException(Exception): ...
 
 
 class ObjectNotFoundError(DataBaseException): ...
