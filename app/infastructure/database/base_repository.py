@@ -3,8 +3,8 @@ from sqlalchemy import delete, insert, select, func, update
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.sql.elements import ColumnElement
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.infastructure.database import Base
-from app.infastructure.database.db_exceptions import (
+from .base import Base
+from .db_exceptions import (
     DataBaseObjectNotFoundException,
     DataBaseObjectAlreadyExistsException,
 )
