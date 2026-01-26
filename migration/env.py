@@ -3,8 +3,8 @@ from logging.config import fileConfig
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
-from app.database import Base
-from app.config import settings
+from app.infastructure.database import Base
+from app.core.config import settings
 from alembic import context
 
 config = context.config
@@ -12,9 +12,7 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# указываем метаданные
 target_metadata = Base.metadata
-# указываем ссылку для подключения к БД
 config.set_main_option(name="sqlalchemy.url", value=settings.postgres_connection)
 
 
