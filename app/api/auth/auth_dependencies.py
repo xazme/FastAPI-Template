@@ -1,5 +1,4 @@
 from typing import Annotated, TYPE_CHECKING
-from functools import lru_cache
 from fastapi import Depends, Cookie
 from fastapi.security import (
     HTTPAuthorizationCredentials,
@@ -7,9 +6,8 @@ from fastapi.security import (
 )
 from app.api.token import TokenServiceDep
 from app.api.user import UserServiceDep
-from app.core.config import settings
-from app.infastructure.jwt import JWTHelper
-from app.infastructure.security import PasswordHasher
+from app.infastructure.jwt import JWTHelperDep
+from app.infastructure.security import PasswordHasherDep
 from .auth_service import AuthService
 from .auth_exceptions import NotAuthenticatedException, EmptyTokenProvidedException
 
@@ -28,29 +26,6 @@ def get_access_token(
     if not token:
         raise EmptyTokenProvidedException()
     return token
-
-
-@lru_cache  # We can use LRU in this case
-def get_jwt_helper():
-    jwt_helper = JWTHelper(
-        alogrithm=settings.algorithm,
-        expire_days=settings.expire_days,
-        expire_minutes=settings.expire_minutes,
-        access_private_key=settings.access_private_key,
-        access_public_key=settings.access_public_key,
-        refresh_private_key=settings.refresh_private_key,
-        refresh_public_key=settings.refresh_public_key,
-    )
-    return jwt_helper
-
-
-@lru_cache  # We can use LRU in this case
-def get_password_hasher():
-    return PasswordHasher()
-
-
-JWTHelperDep = Annotated[JWTHelper, Depends(get_jwt_helper)]
-PasswordHasherDep = Annotated[PasswordHasher, Depends(get_password_hasher)]
 
 
 def get_auth_service(
