@@ -1,8 +1,10 @@
 import uvicorn
-from app.config import settings
+from app.core.config import settings
+from app.core.logger import init_logger
 
 
-def main():
+def main() -> None:
+    init_logger()
     """
     Start the Uvicorn ASGI server with application settings.
 
@@ -22,7 +24,7 @@ def main():
         the application. It does not return unless the server is stopped.
     """
     uvicorn.run(
-        app="app.server.server:app",
+        app="app.core.server:app",
         host=settings.app_host,
         port=settings.app_port,
         reload=settings.reload,

@@ -23,6 +23,7 @@ dependencies = [
     "cryptography (>=46.0.3,<47.0.0)",
     "uvloop (>=0.22.1,<0.23.0)",
     "httptools (>=0.7.1,<0.8.0)",
+    "gunicorn (>=23.0.0,<24.0.0)",
 ]
 
 

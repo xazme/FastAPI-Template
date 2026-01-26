@@ -4,8 +4,8 @@ from app.api.user.user_enums import UserRole
 from app.api.user.user_service import UserService
 from app.api.token.token_dto import UpsertTokenDTO
 from app.api.token.token_service import TokenService
-from .jwt import JWTHelper
-from .utils import PasswordHasher
+from app.infastructure.jwt import JWTHelper
+from app.infastructure.security import PasswordHasher
 from .auth_dto import (
     LoginDTO,
     RegisterDTO,
@@ -85,7 +85,7 @@ class AuthService:
             password=payload.password,
             password_hash=user.password,
         ):
-            raise PasswordIsIncorrectException(details="Incorrect email or password")
+            raise PasswordIsIncorrectException(message="Password is Incorrect")
         return await self._create_and_save_token(user_id=user.id)
 
     async def register(
@@ -109,7 +109,7 @@ class AuthService:
         """
         existing_user = await self.user_service.get_one_or_none(email=payload.email)
         if existing_user:
-            raise AccountAlreadyExists("Account Already Exists")
+            raise AccountAlreadyExists(message="Account Already Exists")
 
         hashed_password = self.password_hasher.get(payload.password)
         user_data = payload.model_dump()
@@ -169,7 +169,7 @@ class AuthService:
         ):
             await self.token_service.delete(refresh_token=payload.refresh_token)
             raise RefreshTokenCompromisedException(
-                details="Refresh token is invalid or has been used"
+                message="Refresh token is invalid or has been used"
             )
         return await self._create_and_save_token(user_id=UUID(user_id))
 

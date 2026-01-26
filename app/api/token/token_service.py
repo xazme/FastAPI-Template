@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.shared import BaseService
+from app.infastructure.database import BaseService
 from .token_model import Token
 from .token_repository import TokenRepository
 from .token_dto import UpsertTokenDTO

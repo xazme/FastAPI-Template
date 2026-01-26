@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.database import db_helper
+from app.infastructure.database import db_helper
 from .token_repository import TokenRepository
 from .token_service import TokenService
 

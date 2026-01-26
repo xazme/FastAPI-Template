@@ -1,6 +1,6 @@
 from typing import Annotated
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
-from app.shared import BaseResponseMixin
+from app.infastructure.database import BaseResponseMixin
 from .user_enums import UserRole
 
 

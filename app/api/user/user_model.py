@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from sqlalchemy import String, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from app.database import Base, CreatedAtMixin, UpdatedAtMixin
+from app.infastructure.database import Base, CreatedAtMixin, UpdatedAtMixin
 from .user_enums import UserRole
 
 if TYPE_CHECKING:

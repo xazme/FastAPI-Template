@@ -31,7 +31,7 @@ async def login(
         httponly=True,
         secure=True,
         samesite="lax",
-        max_age=604800,
+        max_age=604800,  # FIXME
     )
     return tokensDTO
 
