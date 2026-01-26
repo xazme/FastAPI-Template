@@ -3,8 +3,11 @@ from sqlalchemy import delete, insert, select, func, update
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.sql.elements import ColumnElement
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.database import Base
-from ..database.db_exceptions import ObjectNotFoundError, ObjectAlreadyExistsError
+from app.infastructure.database import Base
+from app.infastructure.database.db_exceptions import (
+    DataBaseObjectNotFoundException,
+    DataBaseObjectAlreadyExistsException,
+)
 
 T = TypeVar("T", bound=Base)
 
@@ -46,7 +49,7 @@ class BaseRepository(Generic[T]):
             orm_obj = res.scalar_one()
             return orm_obj
         except NoResultFound:
-            raise ObjectNotFoundError(f"{self.model.__name__} not found")
+            raise DataBaseObjectNotFoundException()
 
     async def get_one_or_none(
         self,
@@ -128,11 +131,9 @@ class BaseRepository(Generic[T]):
             res = await self.session.execute(statement=stmt)
             obj = res.scalar_one()
             return obj
-        except IntegrityError as exc:
+        except IntegrityError:
             await self.session.rollback()
-            raise ObjectAlreadyExistsError(
-                f"Integrity constraint failed on {self.model.__name__}: {exc.orig}"
-            )
+            raise DataBaseObjectAlreadyExistsException()
 
     async def update(
         self,
@@ -152,14 +153,12 @@ class BaseRepository(Generic[T]):
             obj = res.scalar_one()
             return obj
         except NoResultFound:
-            raise ObjectNotFoundError(
+            raise DataBaseObjectNotFoundException(
                 f"{self.model.__name__} not found for update",
             )
-        except IntegrityError as exc:
+        except IntegrityError:
             await self.session.rollback()
-            raise ObjectAlreadyExistsError(
-                f"Integrity constraint failed on {self.model.__name__}: {exc.orig}",
-            )
+            raise DataBaseObjectAlreadyExistsException()
 
     async def delete(
         self,
