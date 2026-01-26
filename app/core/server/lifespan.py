@@ -3,14 +3,12 @@ from typing import AsyncGenerator
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.infastructure.database import db_helper
-from app.core.config import get_current_env
 
 logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def app_lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    logger.info("Using %s enviroment", get_current_env())
     """
     Manage the lifespan of the FastAPI application with asynchronous startup and shutdown events.
 
