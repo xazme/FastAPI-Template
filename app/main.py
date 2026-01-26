@@ -24,7 +24,7 @@ def main() -> None:
         the application. It does not return unless the server is stopped.
     """
     uvicorn.run(
-        app="app.server.server:app",
+        app="app.core.server:app",
         host=settings.app_host,
         port=settings.app_port,
         reload=settings.reload,
