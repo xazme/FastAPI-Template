@@ -1,9 +1,5 @@
-from typing import TypeVar
 from fastapi import status
 from app.core.exceptions import DomainBaseException
-from .base import Base
-
-T = TypeVar(name="T", bound=Base)
 
 
 class ObjectNotFoundException(DomainBaseException):
@@ -11,10 +7,18 @@ class ObjectNotFoundException(DomainBaseException):
 
     def __init__(
         self,
-        message: str = f"{T.__name__} not found",
+        message: str | None = None,
         details: str | None = None,
+        model_name: str | None = None,
     ) -> None:
-        super().__init__(message, details)
+        if message is None:
+            message = f"{model_name} not found"
+
+        super().__init__(
+            message=message,
+            details=details,
+            model_name=model_name,
+        )
 
 
 class ObjectAlreadyExistsException(DomainBaseException):
@@ -22,7 +26,14 @@ class ObjectAlreadyExistsException(DomainBaseException):
 
     def __init__(
         self,
-        message: str = f"{T.__name__} already exists",
+        message: str | None = None,
         details: str | None = None,
+        model_name: str | None = None,
     ) -> None:
-        super().__init__(message, details)
+        if message is None:
+            message = f"{model_name} already exists"
+        super().__init__(
+            message=message,
+            details=details,
+            model_name=model_name,
+        )

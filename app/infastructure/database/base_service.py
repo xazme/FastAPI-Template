@@ -1,6 +1,7 @@
 from typing import TypeVar, Generic, Any, Optional, Sequence
 from sqlalchemy.sql import ColumnElement
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import SQLAlchemyError
 from app.infastructure.database import Base
 from app.infastructure.database.db_exceptions import (
     DataBaseObjectNotFoundException,
@@ -34,7 +35,7 @@ class BaseService(Generic[T]):
         try:
             return await self.repository.get_one(*where, **where_by)
         except DataBaseObjectNotFoundException:
-            raise ObjectNotFoundException()
+            raise ObjectNotFoundException(model_name=self.repository.model.__name__)
 
     async def get_one_or_none(
         self,
@@ -78,7 +79,9 @@ class BaseService(Generic[T]):
             await self._safe_commit()
             return obj
         except DataBaseObjectAlreadyExistsException:
-            raise ObjectAlreadyExistsException()
+            raise ObjectAlreadyExistsException(
+                model_name=self.repository.model.__name__
+            )
 
     async def update(
         self,
@@ -91,9 +94,11 @@ class BaseService(Generic[T]):
             await self._safe_commit()
             return obj
         except DataBaseObjectAlreadyExistsException:
-            raise ObjectAlreadyExistsException()
+            raise ObjectAlreadyExistsException(
+                model_name=self.repository.model.__name__
+            )
         except DataBaseObjectNotFoundException:
-            raise ObjectNotFoundException()
+            raise ObjectNotFoundException(model_name=self.repository.model.__name__)
 
     async def update_by_id(
         self,
@@ -105,9 +110,11 @@ class BaseService(Generic[T]):
             await self._safe_commit()
             return obj
         except DataBaseObjectAlreadyExistsException:
-            raise ObjectAlreadyExistsException()
+            raise ObjectAlreadyExistsException(
+                model_name=self.repository.model.__name__
+            )
         except DataBaseObjectNotFoundException:
-            raise ObjectNotFoundException()
+            raise ObjectNotFoundException(model_name=self.repository.model.__name__)
 
     async def delete(
         self,
@@ -127,6 +134,6 @@ class BaseService(Generic[T]):
     async def _safe_commit(self):
         try:
             await self.session.commit()
-        except Exception:
+        except SQLAlchemyError:
             await self.session.rollback()
             raise
