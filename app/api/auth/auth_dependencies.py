@@ -7,9 +7,9 @@ from fastapi.security import (
 )
 from app.api.token import TokenServiceDep
 from app.api.user import UserServiceDep
-from app.config import settings
-from .jwt import JWTHelper
-from .utils import PasswordHasher
+from app.core.config import settings
+from app.infastructure.jwt import JWTHelper
+from app.infastructure.security import PasswordHasher
 from .auth_service import AuthService
 from .auth_exceptions import NotAuthenticatedException, EmptyTokenProvidedException
 
@@ -23,10 +23,10 @@ def get_access_token(
     credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(http_bearer)],
 ) -> str:
     if not credentials:
-        raise NotAuthenticatedException(details="Not authenticated")
+        raise NotAuthenticatedException()
     token = credentials.credentials
     if not token:
-        raise EmptyTokenProvidedException(details="Empty token provided")
+        raise EmptyTokenProvidedException()
     return token
 
 
@@ -79,7 +79,7 @@ async def get_current_user(
 
 async def get_refresh_token(refresh_token: Annotated[str | None, Cookie()]) -> str:
     if not refresh_token:
-        raise EmptyTokenProvidedException(details="Refresh Token is empty")
+        raise EmptyTokenProvidedException()
     return refresh_token
 
 
