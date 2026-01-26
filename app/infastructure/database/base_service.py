@@ -6,7 +6,7 @@ from app.infastructure.database.db_exceptions import (
     DataBaseObjectNotFoundException,
     DataBaseObjectAlreadyExistsException,
 )
-from app.core.exceptions import DomainBaseException
+from .db_domain_exceptions import ObjectNotFoundException, ObjectAlreadyExistsException
 from .base_repository import BaseRepository
 
 T = TypeVar(name="T", bound=Base)
@@ -33,8 +33,8 @@ class BaseService(Generic[T]):
     ) -> T:
         try:
             return await self.repository.get_one(*where, **where_by)
-        except DataBaseObjectNotFoundException as e:
-            raise DomainBaseException(message=str(e), details="Object Not Found")
+        except DataBaseObjectNotFoundException:
+            raise ObjectNotFoundException()
 
     async def get_one_or_none(
         self,
@@ -77,8 +77,8 @@ class BaseService(Generic[T]):
             obj = await self.repository.create(payload=payload)
             await self._safe_commit()
             return obj
-        except DataBaseObjectAlreadyExistsException as e:
-            raise DomainBaseException(message=str(e), details="Object Already Exists")
+        except DataBaseObjectAlreadyExistsException:
+            raise ObjectAlreadyExistsException()
 
     async def update(
         self,
@@ -90,10 +90,10 @@ class BaseService(Generic[T]):
             obj = await self.repository.update(payload=payload, *where, **where_by)
             await self._safe_commit()
             return obj
-        except DataBaseObjectAlreadyExistsException as e:
-            raise DomainBaseException(message=str(e), details="Object Already Exists")
-        except DataBaseObjectNotFoundException as e:
-            raise DomainBaseException(message=str(e), details="Object Not Found")
+        except DataBaseObjectAlreadyExistsException:
+            raise ObjectAlreadyExistsException()
+        except DataBaseObjectNotFoundException:
+            raise ObjectNotFoundException()
 
     async def update_by_id(
         self,
@@ -104,10 +104,10 @@ class BaseService(Generic[T]):
             obj = await self.repository.update(payload=payload, id=id)
             await self._safe_commit()
             return obj
-        except DataBaseObjectAlreadyExistsException as e:
-            raise DomainBaseException(message=str(e), details="Object Already Exists")
-        except DataBaseObjectNotFoundException as e:
-            raise DomainBaseException(message=str(e), details="Object Not Found")
+        except DataBaseObjectAlreadyExistsException:
+            raise ObjectAlreadyExistsException()
+        except DataBaseObjectNotFoundException:
+            raise ObjectNotFoundException()
 
     async def delete(
         self,
