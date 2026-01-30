@@ -1,13 +1,12 @@
 from typing import Annotated
 from fastapi import Depends
-from sqlalchemy.ext.asyncio import AsyncSession
-from app.infastructure.database import db_helper
+from app.infastructure.database import SessionDep
 from .token_repository import TokenRepository
 from .token_service import TokenService
 
 
 def get_token_service(
-    session: Annotated[AsyncSession, Depends(db_helper.get_session)],
+    session: SessionDep,
 ):
     repository = TokenRepository(session=session)
     return TokenService(
