@@ -2,23 +2,19 @@ import logging
 from typing import AsyncGenerator
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from faststream.kafka import KafkaBroker
-from app.core.config import settings
+from app.infastructure import init_db, init_kafka
 
 logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def app_lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    db_helper = DataBaseHelper(
-        db_url=settings.postgres_connection,
-        echo=True,
-    )
+    db_helper = await init_db(app)
+    broker = await init_kafka(app)
 
-    broker = KafkaBroker(bootstrap_servers=settings)
-
-    await db_helper.create_tables()
-    app.state.pro
+    # await db_helper.create_tables()
+    await broker.start()
     yield
     # await db_helper.drop_tables()
-    await db_helper.dispose()
+    await broker.stop()
+    # await db_helper.dispose()
