@@ -24,6 +24,7 @@ dependencies = [
     "uvloop (>=0.22.1,<0.23.0)",
     "httptools (>=0.7.1,<0.8.0)",
     "gunicorn (>=23.0.0,<24.0.0)",
+    "faststream[kafka] (>=0.6.5,<0.7.0)",
 ]
 
 
