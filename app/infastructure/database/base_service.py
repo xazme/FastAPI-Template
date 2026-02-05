@@ -7,7 +7,10 @@ from app.infastructure.database.db_exceptions import (
     DataBaseObjectNotFoundException,
     DataBaseObjectAlreadyExistsException,
 )
-from .db_domain_exceptions import ObjectNotFoundException, ObjectAlreadyExistsException
+from .db_domain_exceptions import (
+    ObjectNotFoundException,
+    ObjectAlreadyExistsException,
+)
 from .base_repository import BaseRepository
 
 T = TypeVar(name="T", bound=Base)

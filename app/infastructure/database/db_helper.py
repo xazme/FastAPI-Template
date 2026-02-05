@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     create_async_engine,
 )
+from app.core.config import settings
 from .base import Base
 from .db_decorators import db_exception_handler
 
@@ -49,3 +50,13 @@ class DataBaseHelper:
     @db_exception_handler
     async def dispose(self) -> None:
         await self.__engine.dispose()
+
+
+def create_db_helper() -> DataBaseHelper:
+    db_helper = DataBaseHelper(
+        db_url=settings.postgres_connection,
+        echo=False,
+        autoflush=False,
+        expire_on_commit=False,
+    )
+    return db_helper
