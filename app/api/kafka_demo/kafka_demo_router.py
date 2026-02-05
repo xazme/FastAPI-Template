@@ -1,6 +1,6 @@
 from typing import Annotated
 from fastapi import APIRouter, Body, status
-from .kafka_demo_dependencies import KafkaProducerDep
+from .kafka_demo_dependencies import KafkaDemoServiceDep
 
 router = APIRouter()
 
@@ -11,8 +11,7 @@ router = APIRouter()
 )
 async def send_message(
     msg: Annotated[str, Body],
-    topic: Annotated[str, Body],
-    producer: KafkaProducerDep,
+    kafka_demo_service: KafkaDemoServiceDep,
 ):
-    await producer.send(message=msg, topic=topic)
+    await kafka_demo_service.create_useless_smth(payload={"msg": msg})
     return {"msg": "zaebis"}
