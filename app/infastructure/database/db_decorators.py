@@ -15,6 +15,11 @@ from sqlalchemy.exc import (
     OperationalError,
     DatabaseError,
 )
+from .db_infrastructure_exceptions import (
+    DBOperationalError,
+    DBDatabaseError,
+    DBSQLAlchemyError,
+)
 
 if TYPE_CHECKING:
     from .db_helper import DataBaseHelper
@@ -32,14 +37,23 @@ def db_exception_handler(
     ) -> Optional[R]:
         try:
             return await func(self, *args, **kwargs)
+
         except OperationalError as e:
-            print(f"Operational Error: {e}")
-            raise
+            raise DBOperationalError(
+                model_name=self.__class__.__name__,
+                details=str(e),
+            ) from e
+
         except DatabaseError as e:
-            print(f"DataBase Error: {e}")
-            raise
+            raise DBDatabaseError(
+                model_name=self.__class__.__name__,
+                details=str(e),
+            ) from e
+
         except SQLAlchemyError as e:
-            print(f"SQLAlchemy Error: {e}")
-            raise
+            raise DBSQLAlchemyError(
+                model_name=self.__class__.__name__,
+                details=str(e),
+            ) from e
 
     return wrapper

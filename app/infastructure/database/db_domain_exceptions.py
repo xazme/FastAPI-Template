@@ -2,7 +2,10 @@ from fastapi import status
 from app.core.exceptions import DomainBaseException
 
 
-class ObjectNotFoundException(DomainBaseException):
+class DBDomainBaseException(DomainBaseException): ...
+
+
+class ObjectNotFoundException(DBDomainBaseException):
     status_code = status.HTTP_404_NOT_FOUND
 
     def __init__(
@@ -21,7 +24,7 @@ class ObjectNotFoundException(DomainBaseException):
         )
 
 
-class ObjectAlreadyExistsException(DomainBaseException):
+class ObjectAlreadyExistsException(DBDomainBaseException):
     status_code = status.HTTP_409_CONFLICT
 
     def __init__(
