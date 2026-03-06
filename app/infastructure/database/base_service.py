@@ -1,17 +1,21 @@
-from typing import TypeVar, Generic, Any, Optional, Sequence
-from sqlalchemy.sql import ColumnElement
-from sqlalchemy.ext.asyncio import AsyncSession
+from collections.abc import Sequence
+from typing import Any, Generic, TypeVar
+
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.sql import ColumnElement
+
 from app.infastructure.database import Base
 from app.infastructure.database.db_exceptions import (
-    DataBaseObjectNotFoundException,
     DataBaseObjectAlreadyExistsException,
+    DataBaseObjectNotFoundException,
 )
-from .db_domain_exceptions import (
-    ObjectNotFoundException,
-    ObjectAlreadyExistsException,
-)
+
 from .base_repository import BaseRepository
+from .db_domain_exceptions import (
+    ObjectAlreadyExistsException,
+    ObjectNotFoundException,
+)
 
 T = TypeVar(name="T", bound=Base)
 
@@ -27,7 +31,7 @@ class BaseService(Generic[T]):
         self.repository: BaseRepository[T] = repository
         self.session: AsyncSession = session
 
-    async def get(self, id: Any) -> Optional[T]:
+    async def get(self, id: Any) -> T | None:
         return await self.repository.get(id=id)
 
     async def get_one(
@@ -44,7 +48,7 @@ class BaseService(Generic[T]):
         self,
         *where: ColumnElement[bool],
         **where_by: Any,
-    ) -> Optional[T]:
+    ) -> T | None:
         return await self.repository.get_one_or_none(*where, **where_by)
 
     async def get_all(

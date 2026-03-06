@@ -1,5 +1,7 @@
 from fastapi import FastAPI
+
 from app.core.exceptions import DomainBaseException, InfrastructureBaseException
+
 from .domain_exception_handler import domain_exceptions_handler
 from .infrastructure_exception_handler import infrastructure_exceptions_handler
 

@@ -1,6 +1,8 @@
 import uuid
+
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, declared_attr
+from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
+
 from .db_util import generate_correct_spelling_table_name
 
 

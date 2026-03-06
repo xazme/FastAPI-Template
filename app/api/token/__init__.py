@@ -1,4 +1,7 @@
 from .token_model import Token
-from .token_dependencies import TokenServiceDep
+from .token_service import TokenService
 
-__all__ = ["Token", "TokenServiceDep"]
+__all__ = [
+    "Token",
+    "TokenService",
+]

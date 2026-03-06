@@ -1,5 +1,6 @@
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
 from ..constans import ENV_FILE_PATH
 
 

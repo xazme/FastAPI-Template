@@ -1,6 +1,8 @@
 from functools import cached_property
+
 from pydantic import Field, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
 from ..constans import ENV_FILE_PATH
 
 

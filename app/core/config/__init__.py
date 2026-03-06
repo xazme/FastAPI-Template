@@ -1,5 +1,5 @@
-from .config import Config
 from .components import ComponentsConfig
+from .config import Config
 
 
 class ApplicationSettings(Config, ComponentsConfig): ...

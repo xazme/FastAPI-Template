@@ -1,23 +1,22 @@
+from collections.abc import Awaitable, Callable, Coroutine
 from functools import wraps
 from typing import (
-    Any,
-    Awaitable,
-    Coroutine,
-    Callable,
-    Optional,
-    TypeVar,
-    ParamSpec,
-    Concatenate,
     TYPE_CHECKING,
+    Any,
+    Concatenate,
+    ParamSpec,
+    TypeVar,
 )
+
 from sqlalchemy.exc import (
-    SQLAlchemyError,
-    OperationalError,
     DatabaseError,
+    OperationalError,
+    SQLAlchemyError,
 )
+
 from .db_infrastructure_exceptions import (
-    DBOperationalError,
     DBDatabaseError,
+    DBOperationalError,
     DBSQLAlchemyError,
 )
 
@@ -30,11 +29,11 @@ R = TypeVar("R")
 
 def db_exception_handler(
     func: Callable[Concatenate["DataBaseHelper", P], Awaitable[R]],
-) -> Callable[Concatenate["DataBaseHelper", P], Coroutine[Any, Any, Optional[R]]]:
+) -> Callable[Concatenate["DataBaseHelper", P], Coroutine[Any, Any, R | None]]:
     @wraps(func)
     async def wrapper(
         self: "DataBaseHelper", *args: P.args, **kwargs: P.kwargs
-    ) -> Optional[R]:
+    ) -> R | None:
         try:
             return await func(self, *args, **kwargs)
 

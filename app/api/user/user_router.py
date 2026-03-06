@@ -1,9 +1,12 @@
 from typing import Annotated
 from uuid import UUID
+
 from dishka.integrations.fastapi import FromDishka, inject
 from fastapi import APIRouter, Body, Path, status
+
 from app.api.auth.rbac import RequiredRoleForEveryone
-from .user_dto import ResponseUserDTO, UpdateUserDTO
+
+from .user_dtos import ResponseUserDTO, UpdateUserDTO
 from .user_service import UserService
 
 router = APIRouter()

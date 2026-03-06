@@ -1,5 +1,6 @@
 from dishka import Provider, Scope, provide  # type: ignore[misc]
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from .user_repository import UserRepository
 from .user_service import UserService
 
