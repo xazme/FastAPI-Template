@@ -1,26 +1,25 @@
 from uuid import UUID
-from typing import TYPE_CHECKING
+
+from app.api.token.token_dtos import UpsertTokenDTO
+from app.api.token.token_service import TokenService
+from app.api.user import User
 from app.api.user.user_enums import UserRole
 from app.api.user.user_service import UserService
-from app.api.token.token_dto import UpsertTokenDTO
-from app.api.token.token_service import TokenService
 from app.infastructure.jwt import JWTHelper
 from app.infastructure.security import PasswordHasher
-from .auth_dto import (
+
+from .auth_dtos import (
     LoginDTO,
-    RegisterDTO,
     LogOutDTO,
-    ResponseAuthTokensDTO,
     RefreshTokenDTO,
+    RegisterDTO,
+    ResponseAuthTokensDTO,
 )
 from .auth_exceptions import (
-    PasswordIsIncorrectException,
     AccountAlreadyExists,
+    PasswordIsIncorrectException,
     RefreshTokenCompromisedException,
 )
-
-if TYPE_CHECKING:
-    from app.api.user import User
 
 
 class AuthService:
@@ -63,7 +62,7 @@ class AuthService:
         user_data.update(
             {
                 "password": hashed_password,
-                "role": UserRole.STUDENT,
+                "role": UserRole.USER,
             }
         )
         user = await self.user_service.create(payload=user_data)
@@ -112,8 +111,8 @@ class AuthService:
     async def get_user_from_access_token(
         self,
         access_token: str,
-    ) -> "User":
+    ) -> User:
         payload = self.jwt_helper.decode_access_token(token=access_token)
         user_id: str = payload.get("user_id")  # type: ignore
-        user: "User" = await self.user_service.get_one(id=UUID(user_id))
+        user: User = await self.user_service.get_one(id=UUID(user_id))
         return user

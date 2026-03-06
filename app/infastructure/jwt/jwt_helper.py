@@ -1,15 +1,17 @@
-import jwt
-from typing import Any, Optional
 from datetime import datetime, timedelta, timezone
+from typing import Any
+
+import jwt
 from jwt.exceptions import (
-    PyJWTError,
-    InvalidSignatureError,
-    ExpiredSignatureError,
     DecodeError,
-    InvalidAlgorithmError,
+    ExpiredSignatureError,
     ImmatureSignatureError,
+    InvalidAlgorithmError,
     InvalidAudienceError,
+    InvalidSignatureError,
+    PyJWTError,
 )
+
 from .jwt_enums import TokenType
 from .jwt_exceptions import JWTExpiredError, JWTInvalidError
 
@@ -60,7 +62,7 @@ class JWTHelper:
     def decode_access_token(
         self,
         token: str,
-    ) -> Optional[dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         return self.__decode(
             token=token,
             type=TokenType.ACCESS,
@@ -69,7 +71,7 @@ class JWTHelper:
     def decode_refresh_token(
         self,
         token: str,
-    ) -> Optional[dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         return self.__decode(
             token=token,
             type=TokenType.REFRESH,
@@ -79,7 +81,7 @@ class JWTHelper:
         self,
         token: str,
         type: TokenType,
-    ) -> Optional[dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         key = (
             self.access_public_key
             if type == TokenType.ACCESS
@@ -90,7 +92,7 @@ class JWTHelper:
                 jwt=token,
                 algorithms=[self.alogrithm],
                 key=key,
-            )  # type: ignore
+            )
             return data
         except ExpiredSignatureError:
             raise JWTExpiredError("Token expired")
@@ -103,7 +105,7 @@ class JWTHelper:
         ):
             raise JWTInvalidError("Invalid token")
         except PyJWTError as e:
-            raise JWTInvalidError(f"Token error: {str(e)}")
+            raise JWTInvalidError(f"Token error: {e!s}")
 
     def __encode(
         self,
@@ -127,7 +129,7 @@ class JWTHelper:
             exp=exp,
             iat=now,
         )
-        return jwt.encode(  # type: ignore
+        return jwt.encode(
             payload=data_to_encode,
             key=private_key,
             algorithm=algorithm,

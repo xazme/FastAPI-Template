@@ -1,4 +1,5 @@
 from faststream.kafka import KafkaBroker
+
 from app.core.config import settings
 
 

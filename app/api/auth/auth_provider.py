@@ -1,8 +1,10 @@
 from dishka import Provider, Scope, provide  # type: ignore[misc]
+
 from app.api.token import TokenService
 from app.api.user import UserService
 from app.infastructure.jwt import JWTHelper
 from app.infastructure.security import PasswordHasher
+
 from .auth_service import AuthService
 
 

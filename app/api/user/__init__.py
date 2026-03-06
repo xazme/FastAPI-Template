@@ -1,5 +1,9 @@
-from .user_model import User
-from .user_dependencies import UserServiceDep
 from .user_enums import UserRole
+from .user_model import User
+from .user_service import UserService
 
-__all__ = ["User", "UserServiceDep", "UserRole"]
+__all__ = [
+    "User",
+    "UserRole",
+    "UserService",
+]

@@ -1,6 +1,7 @@
-from uuid import UUID
 from typing import Annotated
-from pydantic import BaseModel, Field, EmailStr
+from uuid import UUID
+
+from pydantic import BaseModel, EmailStr, Field
 
 
 class LoginDTO(BaseModel):

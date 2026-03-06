@@ -1,12 +1,15 @@
-from typing import Sequence, TypeVar, Generic, Any, Optional
-from sqlalchemy import delete, insert, select, func, update
+from collections.abc import Sequence
+from typing import Any, Generic, TypeVar
+
+from sqlalchemy import delete, func, insert, select, update
 from sqlalchemy.exc import IntegrityError, NoResultFound
-from sqlalchemy.sql.elements import ColumnElement
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.sql.elements import ColumnElement
+
 from .base import Base
 from .db_exceptions import (
-    DataBaseObjectNotFoundException,
     DataBaseObjectAlreadyExistsException,
+    DataBaseObjectNotFoundException,
 )
 
 T = TypeVar("T", bound=Base)
@@ -26,7 +29,7 @@ class BaseRepository(Generic[T]):
     async def get(
         self,
         id: Any,
-    ) -> Optional[T]:
+    ) -> T | None:
         stmt = select(self.model).where(self.model.id == id)
 
         orm_obj = await self.session.execute(statement=stmt)
@@ -55,7 +58,7 @@ class BaseRepository(Generic[T]):
         self,
         *where: ColumnElement[bool],
         **where_by: Any,
-    ) -> Optional[T]:
+    ) -> T | None:
         stmt = select(self.model)
 
         if where:

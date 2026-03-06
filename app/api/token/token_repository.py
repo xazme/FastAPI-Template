@@ -1,7 +1,10 @@
 from typing import Any
+
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.infastructure.database import BaseRepository
+
 from .token_model import Token
 
 

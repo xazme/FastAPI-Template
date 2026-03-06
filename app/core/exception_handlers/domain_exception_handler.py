@@ -1,6 +1,8 @@
 import logging
+
 from fastapi import Request
 from fastapi.responses import JSONResponse
+
 from app.core.exceptions import DomainBaseException
 
 logger = logging.getLogger(__name__)

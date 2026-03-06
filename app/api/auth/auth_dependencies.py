@@ -1,11 +1,14 @@
 from typing import Annotated
+
 from dishka.integrations.fastapi import FromDishka, inject
 from fastapi import Cookie, Depends
 from fastapi.security import (
     HTTPAuthorizationCredentials,
     HTTPBearer,
 )
+
 from app.api.user import User
+
 from .auth_exceptions import EmptyTokenProvidedException, NotAuthenticatedException
 from .auth_service import AuthService
 

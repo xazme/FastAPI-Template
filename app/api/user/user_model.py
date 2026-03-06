@@ -1,7 +1,10 @@
 from typing import TYPE_CHECKING
-from sqlalchemy import String, Enum
+
+from sqlalchemy import Enum, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from app.infastructure.database import Base, CreatedAtMixin, UpdatedAtMixin
+
 from .user_enums import UserRole
 
 if TYPE_CHECKING:
@@ -25,7 +28,7 @@ class User(Base, CreatedAtMixin, UpdatedAtMixin):
     role: Mapped[UserRole] = mapped_column(
         Enum(UserRole, create_type=False),
         nullable=False,
-        default=UserRole.STUDENT,
+        default=UserRole.USER,
     )
 
     # relationships

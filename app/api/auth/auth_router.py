@@ -1,6 +1,8 @@
 from typing import Annotated
+
 from dishka.integrations.fastapi import FromDishka, inject
 from fastapi import APIRouter, Body, Response, status
+
 from .auth_dependencies import RefreshTokenDep
 from .auth_dtos import (
     LoginDTO,

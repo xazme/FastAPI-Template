@@ -1,29 +1,39 @@
-from fastapi import FastAPI, APIRouter
-from .user.user_router import router as user_router
+from fastapi import APIRouter, FastAPI
+from faststream.kafka import KafkaBroker
+
 from .auth.auth_router import router as auth_router
-from .kafka_demo.kafka_demo_router import router as kafka_demo_router
+from .user.user_router import router as user_router
 
+# from .auth.auth_consumer import router as auth_consumer_router
 
-router = APIRouter()
+router = APIRouter(prefix="/api")
+
 router.include_router(
     router=auth_router,
-    prefix="/auth",
+    prefix="/auth-service",
     tags=["Auth"],
 )
 router.include_router(
     router=user_router,
-    prefix="/user",
+    prefix="/user-service",
     tags=["User"],
 )
-router.include_router(
-    router=kafka_demo_router,
-    prefix="/kafka",
-    tags=["Kafka x FastStream"],
-)
 
 
-def init_routers(app: FastAPI):
+def init_routers(
+    app: FastAPI,
+) -> None:
     app.include_router(router=router)
 
 
-__all__ = ["init_routers"]
+def init_consumers(
+    broker: KafkaBroker,
+) -> None:
+    # broker.include_router(router=user_consumer_router)
+    pass
+
+
+__all__ = [
+    "init_consumers",
+    "init_routers",
+]

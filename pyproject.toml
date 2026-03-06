@@ -26,10 +26,10 @@ dependencies = [
     "dishka-faststream>=0.6.0",
 ]
 
-[tool.uv]
-format = "ruff format . && ruff check . --fix && pyright"
-check = "ruff check . && pyright"
-lint = "ruff check . --fix"
+# [tool.uv]
+# format = "ruff format . && ruff check . --fix && pyright"
+# check = "ruff check . && pyright"
+# lint = "ruff check . --fix"
 
 [tool.pyright]
 pythonVersion = "3.10"
