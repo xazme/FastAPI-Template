@@ -1,11 +1,15 @@
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
     async_sessionmaker,
     create_async_engine,
 )
+
 from app.core.config import settings
+
 from .base import Base
 from .db_decorators import db_exception_handler
 
@@ -33,6 +37,7 @@ class DataBaseHelper:
             expire_on_commit=self.expire_on_commit,
         )
 
+    @asynccontextmanager
     async def get_session(self) -> AsyncGenerator[AsyncSession, None]:
         async with self.__session_factory() as session:
             yield session

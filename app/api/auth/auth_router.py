@@ -1,13 +1,15 @@
-from fastapi import APIRouter, Body, status, Response
 from typing import Annotated
-from .auth_dto import (
+from dishka.integrations.fastapi import FromDishka, inject
+from fastapi import APIRouter, Body, Response, status
+from .auth_dependencies import RefreshTokenDep
+from .auth_dtos import (
     LoginDTO,
-    RegisterDTO,
     LogOutDTO,
-    ResponseAuthTokensDTO,
     RefreshTokenDTO,
+    RegisterDTO,
+    ResponseAuthTokensDTO,
 )
-from .auth_dependencies import AuthServiceDep, RefreshTokenDep
+from .auth_service import AuthService
 from .rbac import RequiredRoleForEveryone
 
 router = APIRouter()
@@ -19,10 +21,11 @@ router = APIRouter()
     response_model_exclude={"refresh_token"},
     status_code=status.HTTP_200_OK,
 )
+@inject
 async def login(
     response: Response,
     payload: Annotated[LoginDTO, Body(...)],
-    auth_service: AuthServiceDep,
+    auth_service: FromDishka[AuthService],
 ):
     tokensDTO = await auth_service.login(payload=payload)
     response.set_cookie(
@@ -42,10 +45,11 @@ async def login(
     response_model_exclude={"refresh_token"},
     status_code=status.HTTP_201_CREATED,
 )
+@inject
 async def register(
     response: Response,
     payload: Annotated[RegisterDTO, Body(...)],
-    auth_service: AuthServiceDep,
+    auth_service: FromDishka[AuthService],
 ):
     tokensDTO = await auth_service.register(payload=payload)
     response.set_cookie(
@@ -64,10 +68,11 @@ async def register(
     response_model=None,
     status_code=status.HTTP_204_NO_CONTENT,
 )
+@inject
 async def logout(
-    response: Response,
     user: RequiredRoleForEveryone,
-    auth_service: AuthServiceDep,
+    response: Response,
+    auth_service: FromDishka[AuthService],
 ):
     await auth_service.logout(payload=LogOutDTO(user_id=user.id))
     response.delete_cookie(key="refresh_token")
@@ -78,10 +83,11 @@ async def logout(
     response_model=ResponseAuthTokensDTO,
     status_code=status.HTTP_200_OK,
 )
+@inject
 async def refresh(
     response: Response,
     refresh_token: RefreshTokenDep,
-    auth_service: AuthServiceDep,
+    auth_service: FromDishka[AuthService],
 ):
     tokensDTO = await auth_service.refresh_token(
         payload=RefreshTokenDTO(refresh_token=refresh_token)
